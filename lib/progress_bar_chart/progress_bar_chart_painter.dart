@@ -64,7 +64,7 @@ class ChartAxis {
   double leadingSpace = 30;
 
   /// x,y 轴文本样式
-  TextStyle textStyle = TextStyle(color: Color(0x999999), fontSize: 12);
+  TextStyle textStyle = const TextStyle(color: Color(0x999999), fontSize: 12);
 
   /// 倾斜坐标轴文本，避免文本距离过近，目前仅针对X轴文本有效
   final bool inclineText;
@@ -172,7 +172,7 @@ class ProgressBarChartPainter extends CustomPainter {
   final ProgressBarItem? selectedBarItem;
   final BrnProgressBarChartSelectCallback? brnProgressBarChartSelectCallback;
 
-  Color unselectedColor = Color(0xffDAEDFE);
+  Color unselectedColor = const Color(0xffDAEDFE);
 
   /// 内容区域
   Rect contentRect = Rect.zero;
@@ -385,18 +385,18 @@ class ProgressBarChartPainter extends CustomPainter {
     if (AxisStyle.axisStyleSolid == xAxis.axisStyle) {
       Offset xLineStart = xAxisRect.topLeft;
       Offset xLineEnd = xAxisRect.topRight;
-      Paint xAxisPaint = Paint()..color = Color(0xff222222);
+      Paint xAxisPaint = Paint()..color = const Color(0xff222222);
       canvas.drawLine(xLineStart, xLineEnd, xAxisPaint);
     } else if (AxisStyle.axisStyleDot == xAxis.axisStyle) {
       Offset xLineStart = xAxisRect.topLeft;
       Offset xLineEnd = xAxisRect.topRight;
-      _drawDashLineOn(canvas, xLineStart, xLineEnd, Color(0xff222222));
+      _drawDashLineOn(canvas, xLineStart, xLineEnd, const Color(0xff222222));
     }
 
     if (BarChartStyle.horizontal == barChartStyle) {
       int xAxisItemCount = xAxis.axisItemList.length;
       double perWidth = xAxisRect.width / xAxisItemCount;
-      Paint markLinkePaint = Paint()..color = Color(0xff222222);
+      Paint markLinkePaint = Paint()..color = const Color(0xff222222);
 
       for (int xAxisItemIndex = 0;
           xAxisItemIndex < xAxisItemCount;
@@ -419,7 +419,7 @@ class ProgressBarChartPainter extends CustomPainter {
         TextPainter textPainter = TextPainter(
             text: TextSpan(
                 text: axisItem.showText,
-                style: TextStyle(fontSize: 12, color: Color(0xff999999))),
+                style: const TextStyle(fontSize: 12, color: Color(0xff999999))),
             textDirection: TextDirection.ltr)
           ..layout(maxWidth: double.infinity, minWidth: 0);
 
@@ -437,7 +437,7 @@ class ProgressBarChartPainter extends CustomPainter {
         }
       }
     } else if (BarChartStyle.vertical == barChartStyle) {
-      Paint markLinkePaint = Paint()..color = Color(0xff222222);
+      Paint markLinkePaint = Paint()..color = const Color(0xff222222);
       barItemEnumerator((int barBundleIndex, ProgressBarBundle barBundle,
           int barGroupIndex, ProgressBarItem barItem) {
         if (0 == barBundleIndex) {
@@ -451,7 +451,8 @@ class ProgressBarChartPainter extends CustomPainter {
           TextPainter textPainter = TextPainter(
               text: TextSpan(
                   text: axisItem.showText,
-                  style: TextStyle(fontSize: 12, color: Color(0xff999999))),
+                  style:
+                      const TextStyle(fontSize: 12, color: Color(0xff999999))),
               textDirection: TextDirection.ltr)
             ..layout(maxWidth: double.infinity, minWidth: 0);
 
@@ -471,12 +472,12 @@ class ProgressBarChartPainter extends CustomPainter {
     if (AxisStyle.axisStyleSolid == yAxis.axisStyle) {
       Offset yLineStart = yAxisRect.bottomRight;
       Offset yLineEnd = yAxisRect.topRight;
-      Paint yAxisPaint = Paint()..color = Color(0xff222222);
+      Paint yAxisPaint = Paint()..color = const Color(0xff222222);
       canvas.drawLine(yLineStart, yLineEnd, yAxisPaint);
     } else if (AxisStyle.axisStyleDot == xAxis.axisStyle) {
       Offset yLineStart = yAxisRect.bottomRight;
       Offset yLineEnd = yAxisRect.topRight;
-      _drawDashLineOn(canvas, yLineStart, yLineEnd, Color(0xff222222));
+      _drawDashLineOn(canvas, yLineStart, yLineEnd, const Color(0xff222222));
     }
     if (BarChartStyle.horizontal == barChartStyle) {
       // 绘制Y轴文字内容
@@ -497,7 +498,7 @@ class ProgressBarChartPainter extends CustomPainter {
         TextPainter(
             text: TextSpan(
                 text: axisItem.showText,
-                style: TextStyle(fontSize: 12, color: Color(0xff999999))),
+                style: const TextStyle(fontSize: 12, color: Color(0xff999999))),
             textDirection: TextDirection.ltr)
           ..layout(maxWidth: double.infinity, minWidth: 0)
           ..paint(canvas, textRect.topLeft);
@@ -525,7 +526,7 @@ class ProgressBarChartPainter extends CustomPainter {
         TextPainter(
             text: TextSpan(
                 text: axisItem.showText,
-                style: TextStyle(fontSize: 12, color: Color(0xff999999))),
+                style: const TextStyle(fontSize: 12, color: Color(0xff999999))),
             textDirection: TextDirection.ltr)
           ..layout(maxWidth: double.infinity, minWidth: 0)
           ..paint(canvas, textRect.topLeft);
@@ -578,7 +579,8 @@ class ProgressBarChartPainter extends CustomPainter {
       }
 
       RRect barRRect = RRect.fromRectAndCorners(barItem.barRect!,
-          topRight: Radius.circular(4), topLeft: Radius.circular(4));
+          topRight: const Radius.circular(4),
+          topLeft: const Radius.circular(4));
       if (selectedBarItem != null) {
         // 有选中的柱形，选中柱形保持原样，未选中的置灰
         Shader shader;
@@ -608,8 +610,11 @@ class ProgressBarChartPainter extends CustomPainter {
         canvas.drawRRect(barRRect, barPaint);
         if (selectedBarItem!.barRect == barItem.barRect) {
           // 选中柱形的虚线以及 HintText
-          _drawDashLineOn(canvas, barItem.barRect!.bottomCenter,
-              Offset(barItem.barRect!.bottomCenter.dx, 0), Color(0xff222222));
+          _drawDashLineOn(
+              canvas,
+              barItem.barRect!.bottomCenter,
+              Offset(barItem.barRect!.bottomCenter.dx, 0),
+              const Color(0xff222222));
         }
       } else {
         Shader shader = LinearGradient(
@@ -689,7 +694,7 @@ class ProgressBarChartPainter extends CustomPainter {
               center: selectedBarTextBgCenterOffset,
               width: textWidth + 10 * 2,
               height: textHeight + 8 * 2),
-          Radius.circular(2));
+          const Radius.circular(2));
       canvas.drawRRect(selectTextBgRRect, selectTextBgPaint);
       selectedBarTextPainter.paint(
           canvas,
@@ -723,7 +728,8 @@ class ProgressBarChartPainter extends CustomPainter {
 
       // 绘制柱状图形
       RRect barRRect = RRect.fromRectAndCorners(barItem.barRect!,
-          topRight: Radius.circular(4), bottomRight: Radius.circular(4));
+          topRight: const Radius.circular(4),
+          bottomRight: const Radius.circular(4));
 
       if (selectedBarItem != null) {
         // 有选中的柱形，选中柱形保持原样，未选中的置灰
@@ -758,7 +764,7 @@ class ProgressBarChartPainter extends CustomPainter {
               canvas,
               barItem.barRect!.centerLeft,
               Offset(xAxisRect.right, barItem.barRect!.centerLeft.dy),
-              Color(0xff222222));
+              const Color(0xff222222));
         }
       } else {
         Shader shader = LinearGradient(
@@ -777,7 +783,7 @@ class ProgressBarChartPainter extends CustomPainter {
         canvas.drawRRect(barRRect, barPaint);
       }
       // 绘制柱状图上的数值
-      TextStyle textStyle = TextStyle(color: Colors.white, fontSize: 12);
+      TextStyle textStyle = const TextStyle(color: Colors.white, fontSize: 12);
       barItemEnumerator((int barBundleIndex, ProgressBarBundle barBundle,
           int barGroupIndex, ProgressBarItem barItem) {
         TextPainter textPainter = TextPainter(
@@ -833,7 +839,7 @@ class ProgressBarChartPainter extends CustomPainter {
               center: selectedBarTextBgCenterOffset,
               width: textWidth + 10 * 2,
               height: textHeight + 8 * 2),
-          Radius.circular(2));
+          const Radius.circular(2));
       canvas.drawRRect(selectTextBgRRect, selectTextBgPaint);
       selectedBarTextPainter.paint(
           canvas,

@@ -35,7 +35,7 @@ class RadarChart extends MultiChildRenderObjectWidget {
   final bool crossedAxisLine;
 
   ///提供绘制雷达图所需要的数据
-  final BrnRadarChartDataProvider provider;
+  final RadarChartDataProvider provider;
 
   ///控制带动画效果绘制时的绘制快慢，默认 1.0
   final double animateProgress;
@@ -217,7 +217,7 @@ class RenderRadarChart extends RenderBox
   double _rotateAngle;
   List<Offset> _offset;
 
-  BrnRadarChartDataProvider _dataProvider;
+  RadarChartDataProvider _dataProvider;
 
   RenderRadarChart({
     required double radius,
@@ -226,7 +226,7 @@ class RenderRadarChart extends RenderBox
     required double maxValue,
     required double rotateAngle,
     required List<Offset> offset,
-    required BrnRadarChartDataProvider provider,
+    required RadarChartDataProvider provider,
     required int levelCount,
     required Color axisLineColor,
     required bool crossedAxisLine,
@@ -297,9 +297,9 @@ class RenderRadarChart extends RenderBox
     markNeedsPaint();
   }
 
-  BrnRadarChartDataProvider get dataProvider => _dataProvider;
+  RadarChartDataProvider get dataProvider => _dataProvider;
 
-  set dataProvider(BrnRadarChartDataProvider value) {
+  set dataProvider(RadarChartDataProvider value) {
     if (value == _dataProvider) return;
     _dataProvider = value;
     markNeedsPaint();
@@ -738,7 +738,7 @@ class RenderRadarChart extends RenderBox
 
 ///A provider that supplies data to draw radar chart.It could be a list of grouped data that means you can
 ///put different radar charts in one table.
-abstract class BrnRadarChartDataProvider {
+abstract class RadarChartDataProvider {
   ///Return radar charts' count
   int getRadarCount();
 
@@ -746,8 +746,8 @@ abstract class BrnRadarChartDataProvider {
   RadarChartStyle getRadarStyle(int radarIndex);
 
   ///Get the radar drawing values of the radar chart according to the specified index.
-  ///The values determine radar's vertexes.The length must be same as [BrnRadarChart.sidesCount].
-  ///The value must range from [BrnRadarChart.minValue] to [BrnRadarChart.maxValue].
+  ///The values determine radar's vertexes.The length must be same as [RadarChart.sidesCount].
+  ///The value must range from [RadarChart.minValue] to [RadarChart.maxValue].
   ///Put values to the list by clockwise order, start from 12 o'clock.
   List<double> getRadarValues(int radarIndex);
 }
@@ -785,8 +785,8 @@ class RadarChartStyle {
   });
 }
 
-///The default BrnRadarChartDataProvider which using the default designed style.
-class DefaultRadarProvider extends BrnRadarChartDataProvider {
+///The default RadarChartDataProvider which using the default designed style.
+class DefaultRadarProvider extends RadarChartDataProvider {
   final List<List<double>> dataList;
 
   DefaultRadarProvider(this.dataList);

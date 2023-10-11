@@ -25,7 +25,7 @@ class ProgressChart extends StatefulWidget {
   final TextStyle textStyle;
 
   /// 自定义进度条上面的Widget，默认显示为文本
-  final ProgressIndicatorBuilder? brnProgressIndicatorBuilder;
+  final ProgressIndicatorBuilder? progressIndicatorBuilder;
 
   /// 背景色，默认 Colors.lightBlueAccent
   final Color backgroundColor;
@@ -49,7 +49,7 @@ class ProgressChart extends StatefulWidget {
     this.value = 0.2,
     this.indicatorLeftPadding = 10,
     this.textStyle = const TextStyle(color: Colors.white),
-    this.brnProgressIndicatorBuilder,
+    this.progressIndicatorBuilder,
     this.colors = const [Colors.blueAccent, Colors.blue],
     this.backgroundColor = Colors.lightBlueAccent,
     this.showAnimation = false,
@@ -131,7 +131,7 @@ class ProgressChartState extends State<ProgressChart>
             notifier: _animation,
             value: _value,
             textStyle: widget.textStyle,
-            brnProgressIndicatorBuilder: widget.brnProgressIndicatorBuilder,
+            brnProgressIndicatorBuilder: widget.progressIndicatorBuilder,
           ),
         )
       ],

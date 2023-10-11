@@ -18,7 +18,7 @@ import 'radar_chart.dart';
 ///   通过[alignment]可以控制标签的插入位置。
 ///   使用[layerMargin]可以控制两层layer之间的间距。
 ///   每层layer支持自定义图案绘制，绘制参考[BrnFunnelLayerPainter]类定义
-class BrnFunnelChart extends MultiChildRenderObjectWidget {
+class FunnelChart extends MultiChildRenderObjectWidget {
   ///漏斗的最大宽度，一般是漏斗最上层的宽度
   final double maxLayerWidth;
 
@@ -59,7 +59,7 @@ class BrnFunnelChart extends MultiChildRenderObjectWidget {
     Color(0xFFB5DBFF),
   ];
 
-  BrnFunnelChart({
+  FunnelChart({
     Key? key,
     required this.layerCount,
     required this.markerCount,
@@ -93,7 +93,7 @@ class BrnFunnelChart extends MultiChildRenderObjectWidget {
             }());
 
   ///漏斗图默认Bruno风格的命名构造函数，[layerCount]不能大于[defaultLayerColors.length]。
-  BrnFunnelChart.defaultStyle({
+  FunnelChart.defaultStyle({
     Key? key,
     required this.layerCount,
     required this.markerCount,
@@ -307,10 +307,10 @@ abstract class RenderFunnelChart extends RenderBox
   }
 
   double? getIntrinsicDimensionHorizontal(
-      double height, double mainChildSizeGetter(RenderBox child));
+      double height, double Function(RenderBox child) mainChildSizeGetter);
 
   double getIntrinsicDimensionVertical(
-      double width, double mainChildSizeGetter(RenderBox child));
+      double width, double Function(RenderBox child) mainChildSizeGetter);
 
   void paintFunnel(PaintingContext context, Offset offset);
 }
@@ -353,7 +353,7 @@ class BrnFunnelRender extends RenderFunnelChart {
 
   @override
   double? getIntrinsicDimensionHorizontal(
-      double height, double mainChildSizeGetter(RenderBox child)) {
+      double height, double Function(RenderBox child) mainChildSizeGetter) {
     double? extent = maxLayerWidth;
     double intrinsicHeight = getIntrinsicDimensionVertical(null, null);
     RenderBox? child = firstChild;
@@ -390,7 +390,7 @@ class BrnFunnelRender extends RenderFunnelChart {
 
   @override
   double getIntrinsicDimensionVertical(
-      double? width, double mainChildSizeGetter(RenderBox child)?) {
+      double? width, double Function(RenderBox child)? mainChildSizeGetter) {
     return layerCount * layerHeight + (layerCount - 1) * layerMargin;
   }
 
@@ -686,7 +686,7 @@ class BrnFunnelRender extends RenderFunnelChart {
   }
 
   void _paintOverflowIndicator(Canvas canvas, Size size) {
-    TextStyle _indicatorTextStyle = TextStyle(
+    TextStyle indicatorTextStyle = const TextStyle(
       color: Color(0xFF900000),
       fontSize: 7.5,
       fontWeight: FontWeight.w800,
@@ -694,7 +694,7 @@ class BrnFunnelRender extends RenderFunnelChart {
     TextSpan span = TextSpan(
       text:
           'Space insufficient to draw，need more width ${_overflowOffset.dx} and height ${_overflowOffset.dy}',
-      style: _indicatorTextStyle,
+      style: indicatorTextStyle,
     );
     TextPainter textPainter = TextPainter();
     textPainter
@@ -759,11 +759,11 @@ class BrnDefaultFunnelLayerPainter extends BrnFunnelLayerPainter {
 
   @override
   List<ui.Color> getLayerColors(int layerIndex) {
-    if (layerIndex >= BrnFunnelChart.defaultLayerColors.length) {
+    if (layerIndex >= FunnelChart.defaultLayerColors.length) {
       //超过最大支持的layer层数
       return [Colors.white];
     }
-    return [BrnFunnelChart.defaultLayerColors[layerIndex]];
+    return [FunnelChart.defaultLayerColors[layerIndex]];
   }
 
   @override

@@ -72,7 +72,7 @@ class LinePainter extends BasePainter {
   late double _fixedHeight, _fixedWidth;
   late List<LineCanvasModel> _lineCanvasModels;
 
-  List<List<Point>> _linePointPositions = [];
+  final List<List<Point>> _linePointPositions = [];
 
   double get startX => _startX;
 
@@ -194,8 +194,8 @@ class LinePainter extends BasePainter {
         var pointArr = <Point>[];
 
         if (item.points.isNotEmpty) {
-          Path _path = Path();
-          Path _shadowPath = Path();
+          Path path = Path();
+          Path shadowPath = Path();
 
           if (xDialValues != null && xDialValues!.isNotEmpty) {
             for (var i = 0; i < item.points.length; i++) {
@@ -227,25 +227,24 @@ class LinePainter extends BasePainter {
           }
 
           if (item.isCurve) {
-            _path = _getSmoothLinePath(pointArr);
+            path = _getSmoothLinePath(pointArr);
 
             /// 生成 Shadow path。
-            _shadowPath = _getSmoothLinePath(pointArr);
-            _shadowPath
+            shadowPath = _getSmoothLinePath(pointArr);
+            shadowPath
               ..lineTo(pointArr[pointArr.length - 1].x as double, _fixedHeight)
               ..lineTo(pointArr[0].x as double, _fixedHeight)
               ..close();
           } else {
-            _path.moveTo(pointArr[0].x as double, pointArr[0].y as double);
-            _shadowPath.moveTo(
-                pointArr[0].x as double, pointArr[0].y as double);
+            path.moveTo(pointArr[0].x as double, pointArr[0].y as double);
+            shadowPath.moveTo(pointArr[0].x as double, pointArr[0].y as double);
             for (var i = 1; i < pointArr.length; i++) {
-              _path.lineTo(pointArr[i].x as double, pointArr[i].y as double);
-              _shadowPath.lineTo(
+              path.lineTo(pointArr[i].x as double, pointArr[i].y as double);
+              shadowPath.lineTo(
                   pointArr[i].x as double, pointArr[i].y as double);
 
               if (i == pointArr.length - 1) {
-                _shadowPath
+                shadowPath
                   ..lineTo(
                       pointArr[pointArr.length - 1].x as double, _fixedHeight)
                   ..lineTo(pointArr[0].x as double, _fixedHeight)
@@ -253,8 +252,8 @@ class LinePainter extends BasePainter {
               }
             }
           }
-          paths.add(_path);
-          shadowPaths.add(_shadowPath);
+          paths.add(path);
+          shadowPaths.add(shadowPath);
         }
         _linePointPositions.add(pointArr);
         _lineCanvasModels.add(LineCanvasModel(
@@ -328,21 +327,21 @@ class LinePainter extends BasePainter {
 
   ///x轴刻度 & 辅助线
   void _drawXRuler(Canvas canvas, Paint paint) {
-    double? _selectedPointX = -1.0;
+    double? selectedPointX = -1.0;
     if (lineSelectIndex >= 0 && pointSelectIndex >= 0) {
-      _selectedPointX =
+      selectedPointX =
           _linePointPositions[lineSelectIndex][pointSelectIndex].x as double?;
     }
     if (xDialValues != null && xDialValues!.isNotEmpty) {
       // 获取刻度长度
       for (var i = 0; i < xDialValues!.length; i++) {
-        double _xPosition = _startX +
+        double xPosition = _startX +
             (xDialValues![i].value - xDialMin!) /
                 (xDialMax! - xDialMin!) *
                 _fixedWidth;
 
-        _selectedPointX = _selectedPointX ?? 0.0;
-        bool isXRulerSelected = (_selectedPointX - _xPosition).abs() < 1.0;
+        selectedPointX = selectedPointX ?? 0.0;
+        bool isXRulerSelected = (selectedPointX - xPosition).abs() < 1.0;
 
         ///绘制x轴文本
         var tpX = TextPainter(
@@ -357,7 +356,7 @@ class LinePainter extends BasePainter {
             textDirection: TextDirection.ltr)
           ..layout();
         // 开始绘制刻度
-        _drawXRuleByPointPosition(tpX, canvas, _xPosition, paint);
+        _drawXRuleByPointPosition(tpX, canvas, xPosition, paint);
       }
     }
   }
